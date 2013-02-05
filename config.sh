@@ -84,6 +84,17 @@ case "$1" in
 	repo_sync $1
 	;;
 
+case "$1" in	
+"gp-peak")
+	echo DEVICE=peak >> .tmp-config &&
+	repo_sync $1
+	;;
+
+"gp-keon")
+	echo DEVICE=keon >> .tmp-config &&
+	repo_sync $1
+	;;
+
 "emulator")
 	echo DEVICE=generic >> .tmp-config &&
 	echo LUNCH=full-eng >> .tmp-config &&
@@ -107,6 +118,8 @@ case "$1" in
 	echo - otoro
 	echo - unagi
 	echo - pandaboard
+	echo - gp-peak
+	echo - gp-keon
 	echo - emulator
 	echo - emulator-x86
 	exit -1

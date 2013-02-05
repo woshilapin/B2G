@@ -247,6 +247,14 @@ case "$DEVICE" in
 	flash_heimdall $PROJECT
 	;;
 
+"peak")
+	flash_fastboot nounlock $PROJECT
+	;;
+
+"keon")
+	flash_fastboot nounlock $PROJECT
+	;;
+
 *)
 	if [[ $(type -t flash_${DEVICE}) = function ]]; then
 		flash_${DEVICE} $PROJECT
