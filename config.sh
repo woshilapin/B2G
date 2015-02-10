@@ -89,6 +89,13 @@ case "$1" in
 	echo DEVICE=peak >> .tmp-config &&
 	repo_sync $1
 	;;
+	
+"revolution")
+	echo DEVICE=revolution >> .tmp-config &&
+	echo PRODUCT_NAME=revolution >> .tmp-config &&
+	echo B2G_SYSTEM_APPS=1 >> .tmp-config &&
+	repo_sync $1
+	;;
 
 "gp-keon")
 	echo DEVICE=keon >> .tmp-config &&
@@ -120,6 +127,7 @@ case "$1" in
 	echo - pandaboard
 	echo - gp-peak
 	echo - gp-keon
+	echo - revolution
 	echo - emulator
 	echo - emulator-x86
 	exit -1
