@@ -75,12 +75,12 @@ echo GECKO_OBJDIR=$PWD/objdir-gecko >> .tmp-config
 echo DEVICE_NAME=$1 >> .tmp-config
 
 case "$1" in	
-"gp-peak")
+"peak")
 	echo DEVICE=peak >> .tmp-config &&
 	repo_sync $1
 	;;
 	
-"gp-keon")
+"keon")
 	echo DEVICE=keon >> .tmp-config &&
 	repo_sync $1
 	;;
@@ -96,8 +96,8 @@ case "$1" in
 	echo "Flags are passed through to |./repo sync|."
 	echo
 	echo Valid devices to configure are:
-	echo - gp-peak
-	echo - gp-keon
+	echo - peak
+	echo - keon
 	echo - revolution
 	exit -1
 	;;
