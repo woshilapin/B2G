@@ -30,8 +30,8 @@ case `uname` in
 	exit -1
 esac
 
-GITREPO=${GITREPO:-"git://github.com/mozilla-b2g/b2g-manifest"}
-BRANCH=${BRANCH:-master}
+GITREPO=${GITREPO:-"git://github.com/woshilapin/b2g-manifest"}
+BRANCH=${BRANCH:-gp-revolution}
 
 while [ $# -ge 1 ]; do
 	case $1 in
@@ -74,9 +74,9 @@ echo MAKE_FLAGS=-j$((CORE_COUNT + 2)) > .tmp-config
 echo GECKO_OBJDIR=$PWD/objdir-gecko >> .tmp-config
 echo DEVICE_NAME=$1 >> .tmp-config
 
-case "$1" in
-"galaxy-s2")
-	echo DEVICE=galaxys2 >> .tmp-config &&
+case "$1" in	
+"peak")
+	echo DEVICE=peak >> .tmp-config &&
 	repo_sync $1
 	;;
 
@@ -205,6 +205,13 @@ case "$1" in
 	repo_sync shinano
 	;;
 
+"revolution")
+	echo DEVICE=revolution >> .tmp-config &&
+	echo PRODUCT_NAME=revolution >> .tmp-config &&
+	echo B2G_SYSTEM_APPS=1 >> .tmp-config &&
+	repo_sync $1
+	;;
+
 *)
 	echo "Usage: $0 [-cdflnq] (device name)"
 	echo "Flags are passed through to |./repo sync|."
@@ -224,6 +231,7 @@ case "$1" in
 	echo - inari
 	echo - keon
 	echo - peak
+	echo - revolution
 	echo - leo
 	echo - hamachi
 	echo - helix

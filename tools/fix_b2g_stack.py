@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-"""This script uses addr2line (part of binutils) to post-process the entries
-produced by NS_FormatCodeAddress().
+'''Prettifies stacks retrieved from a B2G device.
 
 This is an analog to fix_linux_stack.py and is functionally similar to
 $B2G_ROOT/scripts/profile-symbolicate.py.
@@ -353,8 +352,8 @@ class StackFixer(object):
         self._cache = StackFixerCache(options)
         self._options = options
 
-    def translate(self, fn_guess, lib, offset):
-        """Translate the given offset (an integer) into the given library (e.g.
+    def translate(self, lib, offset, pc=None, fn_guess=None):
+        '''Translate the given offset (an integer) into the given library (e.g.
         'libxul.so') into a human-readable string and return that string.
 
         fn_guess is a hint to make the output look nicer; we don't use
@@ -421,8 +420,11 @@ class StackFixer(object):
         finally:
             proc.kill()
 
-    def _addr2line(self, lib, offset, fn_guess):
-        """Use addr2line to translate the given lib+offset.
+    def _addr2line(self, lib, offset, pc, fn_guess):
+        '''Use addr2line to translate the given lib+offset.
+
+        We use pc only for aesthetic purposes; it's not passed to addr2line or
+        anything.
 
         If addr2line can't resolve a lib+offset, you may still have a guess as
         to what function lives there.  (For example, NS_StackWalk is sometimes
@@ -464,40 +466,6 @@ class StackFixer(object):
             # leave it in a dead state and presumably every time we read/write
             # to/from it, we'll hit this case.
             return '%s (addr2line exception)' % fallback_str()
-
-
-# Matches lines produced by DMD before bug 1062709 landed.
-old_line_re = re.compile(
-    r'''(\s+)                   # leading whitespace
-        ([^ ][^\]]*)            # either '???' or mangled fn signature
-        \[
-          (\S+)                 # library name
-          \s+
-          \+(0x[0-9a-fA-F]+)    # offset into lib
-        \]
-        (\s+0x[0-9a-fA-F]+.*)      # program counter and anything else
-        ''',
-    re.VERBOSE)
-
-# Matches lines produced by DMD (via NS_FormatCodeAddress()) after bug 1062709
-# landed.
-line_re = re.compile("^(.*#\d+: )(.+)\[(.+) \+(0x[0-9A-Fa-f]+)\](.*)$")
-
-def fixSymbols(line, fixer):
-    # Try parsing it as if it's the new stack frame format.
-    result = line_re.match(line)
-    if result is not None:
-        (before, fn, lib, offset, after) = result.groups()
-        return before + fixer.translate(fn, lib, int(offset, 16)) + after + '\n'
-
-    # Try parsing it as if it's the old stack frame format.
-    result = old_line_re.match(line)
-    if result is not None:
-        (before, fn, lib, offset, after) = result.groups()
-        return before + fixer.translate(fn, lib, int(offset, 16)) + after + '\n'
-
-    return line
-
 
 def fix_b2g_stacks_in_file(infile, outfile, args={}, **kwargs):
     """Read lines from infile and output those lines to outfile with their
