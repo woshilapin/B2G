@@ -120,6 +120,13 @@ case "$1" in
 	repo_sync $1
 	;;
 
+"revolution")
+	echo DEVICE=revolution >> .tmp-config &&
+	echo PRODUCT_NAME=revolution >> .tmp-config &&
+	echo B2G_SYSTEM_APPS=1 >> .tmp-config &&
+	repo_sync $1
+	;;
+
 "flame"|"flame-kk")
 	echo PRODUCT_NAME=flame >> .tmp-config &&
 	repo_sync $1
@@ -202,6 +209,7 @@ case "$1" in
 	echo - inari
 	echo - keon
 	echo - peak
+	echo - revolution
 	echo - leo
 	echo - hamachi
 	echo - helix
